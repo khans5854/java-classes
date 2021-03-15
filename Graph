@@ -1,0 +1,72 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class Graph {
+
+	private class vertex{
+		HashMap<String ,Integer> nbrs=new HashMap<String ,Integer>();
+	}
+	HashMap<String,vertex> vrtx;
+	public Graph() {
+		vrtx=new HashMap<String ,vertex>();
+	}
+	public int numVertex() {
+		return this.vrtx.size();
+	}
+	public boolean containVertex(String vname) {
+		return this.vrtx.containsKey(vname);
+	}
+	public void addVertex(String vname) {
+		vertex vt=new vertex();
+		this.vrtx.put(vname, vt);
+	}
+	public void removeVertex(String vname) {
+		ArrayList<String>arr=new ArrayList<String>(this.vrtx.get(vname).nbrs.keySet());
+		for(String key:arr) {
+			this.vrtx.get(key).nbrs.remove(vname);
+		}
+		this.vrtx.remove(vname);
+	}
+	public int numEdge() {
+		int count=0;
+		ArrayList<String> arr=new ArrayList<String>(vrtx.keySet());
+		for(String key:arr) {
+			vertex v=this.vrtx.get(key);
+			count+=v.nbrs.size();
+		}
+		return count/2;
+	}
+	public boolean containEdge(String vname1,String vname2) {
+		vertex v1=this.vrtx.get(vname1);
+		vertex v2=this.vrtx.get(vname2);
+		if(v1==null||v2==null||!v1.nbrs.containsKey(vname2)) {
+			return false;
+		}
+		return true;
+	}
+	public void addEdge(String vname1,String vname2,int cost) {
+		vertex v1=this.vrtx.get(vname1);
+		vertex v2=this.vrtx.get(vname2);
+		if(v1==null||v2==null||v1.nbrs.containsKey(vname2)) {
+			return;
+		}
+		v1.nbrs.put(vname2, cost);
+		v2.nbrs.put(vname1, cost);
+	}
+	public void removeEdge(String vname1,String vname2) {
+		vertex v1=this.vrtx.get(vname1);
+		vertex v2=this.vrtx.get(vname2);
+		if(v1==null||v2==null||!v1.nbrs.containsKey(vname2)) {
+			return;
+		}
+		v1.nbrs.remove(vname2);
+		v2.nbrs.remove(vname1);
+	}
+	public void display() {
+		ArrayList<String> arr=new ArrayList<String>(this.vrtx.keySet());
+		for(String key:arr) {
+			System.out.println(key+" "+this.vrtx.get(key).nbrs);
+		}
+		System.out.println("-------------------------------");
+	}
+}
